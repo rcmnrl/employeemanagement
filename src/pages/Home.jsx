@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import EmployeeCard from './EmployeeCard';
 
 function Home() {
@@ -11,38 +11,41 @@ function Home() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const handleInputChange = (e) => {
-    setEmployee({
-      ...employee,
-      [e.target.id]: e.target.value,
-    });
+    const { id, value } = e.target;
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      [id]: value,
+    }));
   };
 
+  useEffect(() => {
+    const savedEmployeeList = JSON.parse(localStorage.getItem('employeeList'));
+
+    if (savedEmployeeList) {
+      setEmployeeList(savedEmployeeList);
+    }
+  }, []);
+
   const handleAddEmployee = () => {
-    // Check if both first name and last name are provided
     if (!employee.firstname || !employee.lastname) {
       alert('Please enter both first name and last name.');
       return;
     }
 
-    setEmployeeList((prevEmployeeList) => [
-      ...prevEmployeeList,
-      {
-        id: Date.now(),
-        firstname: employee.firstname,
-        lastname: employee.lastname,
-      },
-    ]);
+    const newEmployee = {
+      id: Date.now(),
+      firstname: employee.firstname,
+      lastname: employee.lastname,
+    };
 
-    setEmployee({
-      firstname: '',
-      lastname: '',
-    });
+    setEmployeeList((prevEmployeeList) => [...prevEmployeeList, newEmployee]);
+    setEmployee({ firstname: '', lastname: '' });
 
-    console.log(employeeList);
+ 
+    localStorage.setItem('employeeList', JSON.stringify([...employeeList, newEmployee]));
   };
 
   const handleEditEmployee = () => {
-    // Check if both first name and last name are provided
     if (!employee.firstname || !employee.lastname) {
       alert('Please enter both first name and last name.');
       return;
@@ -56,8 +59,11 @@ function Home() {
       )
     );
 
-    setSelectedEmployee(null); // Reset selectedEmployee after editing
-    setEmployee({ firstname: '', lastname: '' }); // Reset the input fields
+    setSelectedEmployee(null); 
+    setEmployee({ firstname: '', lastname: '' }); 
+
+
+    localStorage.setItem('employeeList', JSON.stringify([...employeeList]));
   };
 
   const handleDeleteEmployee = (id) => {
@@ -67,6 +73,8 @@ function Home() {
       setEmployeeList((prevEmployeeList) =>
         prevEmployeeList.filter((emp) => emp.id !== id)
       );
+
+      localStorage.setItem('employeeList', JSON.stringify([...employeeList]));
     }
   };
 
@@ -80,7 +88,7 @@ function Home() {
       <h1 className="fw-bold">Employee Management Dashboard</h1>
       <p>This is a list of Employees</p>
       <div className="mb-5 p-5 border">
-        {/* Input fields for adding employees */}
+        {}
         <div className="row">
           <div className="col-md-5">
             <label htmlFor="firstname">First Name:</label>
@@ -113,7 +121,7 @@ function Home() {
           </div>
         </div>
 
-        {/* Display the list of employees using EmployeeCard */}
+        {}
         <div className="mt-4">
           {employeeList.map((emp) => (
             <EmployeeCard
@@ -125,7 +133,7 @@ function Home() {
           ))}
         </div>
 
-        {/* EditEmployee component */}
+        {}
         {selectedEmployee && (
           <div>
             <h2>Edit Employee</h2>

@@ -3,7 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 function Layout() {
   return (
     <main className="d-flex flex-column min-vh-100">
-      <nav className="navbar navbar-expand-lg" style={{ backgroundColor: 'pink' }}>
+      <nav className="navbar navbar-expand-lg" style={{ backgroundColor: 'violet' }}>
         <div className="container-fluid">
           <Link className="navbar-brand fw-bold text-blue" to="/">Employee Management</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
